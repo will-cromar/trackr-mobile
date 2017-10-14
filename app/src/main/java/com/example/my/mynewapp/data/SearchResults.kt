@@ -33,28 +33,7 @@ interface SearchResultProvider {
 
 class DummySearchResultProvider : SearchResultProvider {
     private val gson = Gson()
-    private val webApiService = LocalhostWebApiService()
-
-    private val movieNames = listOf(
-            "Carpet Stain: The Cleaner Man",
-            "Is your Ceiling Fan a Soviet Spy? (A Documentary)",
-            "COP 4331C: Processes of Object Oriented Software Development",
-            "How to Make a Bad Language: The Story of Java",
-            "Inner Life of the Cell",
-            "Mitochondria: Powerhouse of the Cell",
-            "Linearly Independent",
-            "Physics 2: Box Diagrams Reloaded",
-            "Do Better 2: Doing Better",
-            "Group 7: A Tale of Two Binaries",
-            "Mission Impossible 16: Finding Parking at UCF",
-            "Of Thee I Pain: Design Hell",
-            "Oviedo: The City of Chickens")
-
-//    override fun search(query: Query): List<Movie> {
-//        val len = movieNames.size - 1
-//        val df = DateFormat.getDateInstance(DateFormat.MEDIUM)
-//        return (0..len).map { Movie(movieNames[it], df.parse("Sep 18, 2017").time) }
-//    }
+    private val webApiService = DatadumpWebApiService()
 
     override fun search(query: Query): List<SearchResult> {
         val json = webApiService.search(query)

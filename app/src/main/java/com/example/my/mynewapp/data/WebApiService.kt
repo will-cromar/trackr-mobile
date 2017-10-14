@@ -1,13 +1,11 @@
 package com.example.my.mynewapp.data
 
 import android.util.Log
-import org.json.JSONObject
 import java.io.BufferedInputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
 interface WebApiService {
-    // TODO: Implement other services, such as user login
     fun search(query: Query): String
 }
 
@@ -21,14 +19,12 @@ class DummyWebApiService : WebApiService {
 }
 
 /**
- * Simple web service implementation that queries the computer the emulator is running on.
+ * Simple web service implementation that queries the /datadump endpoint.
  *
  * For testing purposes only.
  */
-class LocalhostWebApiService : WebApiService {
-    // 10.0.2.2 is the computer the emulator is running on; localhost loops back to the phone.
-    // TODO: Host the web server somewhere
-    val url = URL("http://10.0.2.2:5000/datadump");
+class DatadumpWebApiService : WebApiService {
+    val url = URL("https://limitless-dusk-74218.herokuapp.com/datadump");
 
     override fun search(query: Query): String {
         val urlConnection = url.openConnection() as HttpURLConnection
@@ -36,7 +32,11 @@ class LocalhostWebApiService : WebApiService {
 
         try {
             val inputStream = BufferedInputStream(urlConnection.inputStream)
-            res = inputStream.bufferedReader().readLine()
+            val builder = StringBuilder()
+            inputStream.bufferedReader()
+                    .readLines()
+                    .forEach { builder.appendln(it) }
+            res = builder.toString()
             Log.d("webapiservice", res)
         } finally {
             urlConnection.disconnect()
