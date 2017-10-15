@@ -8,12 +8,27 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
+import android.util.Log
 import android.view.*
 import android.widget.BaseAdapter
+import android.widget.Toast
+import com.example.my.mynewapp.data.AuthCredentials
+import com.example.my.mynewapp.data.AuthResponse
+import com.example.my.mynewapp.data.WhoAmIResponse
+import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_movie_details.*
 import kotlinx.android.synthetic.main.activity_splash_page.*
 import kotlinx.android.synthetic.main.row_browse.view.*
 import kotlinx.android.synthetic.main.fragment_splash_search.view.*
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.uiThread
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.DataOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 class SplashPageActivity : AppCompatActivity() {
 
@@ -42,6 +57,9 @@ class SplashPageActivity : AppCompatActivity() {
         false
     }
 
+    /**
+     * Controls main layout.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_page)
@@ -70,6 +88,13 @@ class SplashPageActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean = true
         })
+
+        val menuItem = menu?.findItem(R.id.action_profile)!!
+        menuItem.setOnMenuItemClickListener {
+            startActivity<LoginActivity>();
+
+            true;
+        }
 
         return super.onCreateOptionsMenu(menu)
     }

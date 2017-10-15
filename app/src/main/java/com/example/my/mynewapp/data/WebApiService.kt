@@ -5,6 +5,20 @@ import java.io.BufferedInputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
+// Any JSON response from the server may have error information defined
+open class JsonResponse(val status_code: String? = null,
+                        val error: String? = null,
+                        val description: String? = null)
+
+// Contains a JWT auth token
+data class AuthResponse(val access_token: String?) : JsonResponse()
+
+// Contains the username associated with a "Who am I?" request
+data class WhoAmIResponse(val username: String?) : JsonResponse()
+
+// Login credentials for authorization
+data class AuthCredentials(val username: String, val password: String)
+
 interface WebApiService {
     fun search(query: Query): String
 }
