@@ -1,9 +1,7 @@
 package com.example.my.mynewapp.data
 
-import android.util.Log
-import java.io.BufferedInputStream
-import java.net.HttpURLConnection
-import java.net.URL
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 // Any JSON response from the server may have error information defined
 open class JsonResponse(val status_code: String? = null,
@@ -16,48 +14,43 @@ data class AuthResponse(val access_token: String?) : JsonResponse()
 // Contains the username associated with a "Who am I?" request
 data class WhoAmIResponse(val username: String?) : JsonResponse()
 
+// Contains a list of all content in the database
+typealias DataDumpResponse = List<Movie>
+
 // Login credentials for authorization
 data class AuthCredentials(val username: String, val password: String)
 
-interface WebApiService {
-    fun search(query: Query): String
-}
+class WebApiService(val root: String) {
+    val gson = Gson()
+    val requestInterface = HttpRequestInterface(root)
 
-/**
- * Simple dummy web service that does not require an internet connection.
- *
- * For testing purposes only.
- */
-class DummyWebApiService : WebApiService {
-    override fun search(query: Query) = "[{'releaseDate': 1436241600, 'name': 'Carpet Stain: The Cleaner Man'}, {'releaseDate': 1489982400, 'name': 'Is your Ceiling Fan a Soviet Spy? (A Documentary)'}, {'releaseDate': 1420261200, 'name': 'COP 4331C: Processes of Object Oriented Software Development'}, {'releaseDate': 1456981200, 'name': 'How to Make a Bad Language: The Story of Java'}, {'releaseDate': 1430971200, 'name': 'Inner Life of the Cell'}, {'releaseDate': 1583211600, 'name': 'Mitochondria: Powerhouse of the Cell'}, {'releaseDate': 1494043200, 'name': 'Linearly Independent'}, {'releaseDate': 1533355200, 'name': 'Physics 2: Box Diagrams Reloaded'}, {'releaseDate': 1567310400, 'name': 'Do Better 2: Doing Better'}, {'releaseDate': 1572235200, 'name': 'Group 7: A Tale of Two Binaries'}, {'releaseDate': 1550206800, 'name': 'Mission Impossible 16: Finding Parking at UCF'}, {'releaseDate': 1451192400, 'name': 'Of Thee I Pain: Design Hell'}, {'releaseDate': 1586836800, 'name': 'Oviedo: The City of Chickens'}]"
-}
+    companion object {
+        // List of endpoints for all services
+        val DATA_DUMP_ENDPOINT = "datadump"
+        val AUTH_ENDPOINT = "auth"
+        val WHO_ENDPOINT = "api/whoami"
+    }
 
-/**
- * Simple web service implementation that queries the /datadump endpoint.
- *
- * For testing purposes only.
- */
-class DatadumpWebApiService : WebApiService {
-    val url = URL("https://limitless-dusk-74218.herokuapp.com/datadump");
+    fun dataDump(): DataDumpResponse {
+        val json = requestInterface.get(DATA_DUMP_ENDPOINT)
 
-    override fun search(query: Query): String {
-        val urlConnection = url.openConnection() as HttpURLConnection
-        val res : String;
+        // HACK: This is a really hideous block, but it is necessary according to the official docs
+        // ref: https://github.com/google/gson/blob/master/UserGuide.md#collections-examples
+        val listType = object : TypeToken<DataDumpResponse>() {}.type
+        return gson.fromJson<DataDumpResponse>(json, listType)
+    }
 
-        try {
-            val inputStream = BufferedInputStream(urlConnection.inputStream)
-            val builder = StringBuilder()
-            inputStream.bufferedReader()
-                    .readLines()
-                    .forEach { builder.appendln(it) }
-            res = builder.toString()
-            Log.d("webapiservice", res)
-        } finally {
-            urlConnection.disconnect()
-        }
+    fun authenticate(credentials: AuthCredentials): AuthResponse {
+        val credentialsJson = gson.toJson(credentials)
+        val responseJson = requestInterface.post(AUTH_ENDPOINT, credentialsJson)
 
-        return res
+        return gson.fromJson<AuthResponse>(responseJson, AuthResponse::class.java)
+    }
+
+    fun whoAmI(authorization: AuthResponse) : WhoAmIResponse {
+        val token = "JWT ${authorization.access_token}"
+        val responseJson = requestInterface.get(WHO_ENDPOINT, authHeader = token)
+
+        return gson.fromJson<WhoAmIResponse>(responseJson, WhoAmIResponse::class.java)
     }
 }
-
-// TODO: Create an actual implementation of the WebApiService interface

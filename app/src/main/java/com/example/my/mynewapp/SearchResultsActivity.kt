@@ -19,8 +19,7 @@ import org.jetbrains.anko.*
 const val EXTRA_QUERY = "query"
 
 class SearchResultsActivity : AppCompatActivity() {
-    // TODO: Drop in actual search result provider
-    private val resultProvider: SearchResultProvider = DummySearchResultProvider()
+    private val webApi = WebApiService("https://limitless-dusk-74218.herokuapp.com/")
     private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +36,7 @@ class SearchResultsActivity : AppCompatActivity() {
         val context = this
         doAsync {
             try {
-                val results = resultProvider.search(query)
+                val results = webApi.dataDump()
 
                 uiThread {
                     moviesList.adapter = MoviesRecyclerViewAdapter(context, results)
@@ -50,7 +49,9 @@ class SearchResultsActivity : AppCompatActivity() {
                     searchErrorMessage.visibility = View.VISIBLE
                 }
             } finally {
-                searchProgressBar.visibility = View.GONE
+                uiThread {
+                    searchProgressBar.visibility = View.GONE
+                }
             }
         }
     }

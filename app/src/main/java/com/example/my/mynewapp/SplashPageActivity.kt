@@ -8,35 +8,23 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
-import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
+import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.Toast
-import com.example.my.mynewapp.data.AuthCredentials
-import com.example.my.mynewapp.data.AuthResponse
-import com.example.my.mynewapp.data.WhoAmIResponse
-import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_movie_details.*
 import kotlinx.android.synthetic.main.activity_splash_page.*
-import kotlinx.android.synthetic.main.row_browse.view.*
 import kotlinx.android.synthetic.main.fragment_splash_search.view.*
-import org.jetbrains.anko.doAsync
+import kotlinx.android.synthetic.main.row_browse.view.*
 import org.jetbrains.anko.startActivity
-import org.jetbrains.anko.uiThread
-import java.io.BufferedInputStream
-import java.io.BufferedOutputStream
-import java.io.DataOutputStream
-import java.net.HttpURLConnection
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 
 class SplashPageActivity : AppCompatActivity() {
 
     private companion object {
         val NUM_PAGES = 3
         val HOME_PAGE_INDEX = 0
-        val SEARCH_PAGE_INDEX = 1
-        val REMINDERS_PAGE_INDEX = 2
+        val BROWSE_PAGE_INDEX = 1
+        val NOTIFICATIONS_PAGE_INDEX = 2
     }
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -46,11 +34,11 @@ class SplashPageActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
-                splashFragmentPager.currentItem = SEARCH_PAGE_INDEX
+                splashFragmentPager.currentItem = BROWSE_PAGE_INDEX
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
-                splashFragmentPager.currentItem = REMINDERS_PAGE_INDEX
+                splashFragmentPager.currentItem = NOTIFICATIONS_PAGE_INDEX
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -92,7 +80,6 @@ class SplashPageActivity : AppCompatActivity() {
         val menuItem = menu?.findItem(R.id.action_profile)!!
         menuItem.setOnMenuItemClickListener {
             startActivity<LoginActivity>();
-
             true;
         }
 
@@ -109,8 +96,8 @@ class SplashPageActivity : AppCompatActivity() {
         override fun getItem(position: Int): Fragment? =
                 when(position) {
                     HOME_PAGE_INDEX -> SplashHomeFragment()
-                    SEARCH_PAGE_INDEX -> SplashBrowseFragment()
-                    REMINDERS_PAGE_INDEX -> SplashNotificationsFragment()
+                    BROWSE_PAGE_INDEX -> SplashBrowseFragment()
+                    NOTIFICATIONS_PAGE_INDEX -> SplashNotificationsFragment()
                     else -> Fragment()
                 }
     }
