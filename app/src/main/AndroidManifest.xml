@@ -23,8 +23,7 @@
         </activity>
         <activity
             android:name=".DisplayMessageActivity"
-            android:label="Message"
-            android:parentActivityName=".SearchResultsActivity" />
+            android:label="Message" />
         <activity
             android:name=".SearchResultsActivity"
             android:label="@string/title_default_search" />
@@ -32,7 +31,9 @@
             android:name=".MovieDetailsActivity"
             android:label="@string/title_activity_movie_details"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".LoginActivity"></activity>
+        <activity
+            android:name=".LoginActivity"
+            android:label="Sign in" />
     </application>
 
 </manifest>

@@ -20,16 +20,14 @@ const val EXTRA_QUERY = "query"
 
 class SearchResultsActivity : AppCompatActivity() {
     private val webApi = WebApiService("https://limitless-dusk-74218.herokuapp.com/")
-    private val gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_results_page)
 
-        val queryJson = intent.getStringExtra(EXTRA_QUERY)
-        val query = gson.fromJson<Query>(queryJson, Query::class.java)
+        val query : String = intent.getStringExtra(EXTRA_QUERY)
 
-        title = "${resources.getString(R.string.title_prefix_search)} ${query.search}"
+        title = "${resources.getString(R.string.title_prefix_search)} $query"
         searchErrorMessage.visibility = View.GONE
 
         // Asynchronously query the web API. Loading circle will be shown until success or error.
@@ -63,8 +61,7 @@ class SearchResultsActivity : AppCompatActivity() {
             val rowMain = LayoutInflater
                     .from(parent!!.context)
                     .inflate(R.layout.row_search, parent, false)
-            val viewHolder = ViewHolder(rowMain)
-            return viewHolder
+            return ViewHolder(rowMain)
         }
 
         override fun onBindViewHolder(holder: ViewHolder?, position: Int) {

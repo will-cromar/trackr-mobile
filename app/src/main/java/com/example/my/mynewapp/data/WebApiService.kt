@@ -20,9 +20,9 @@ typealias DataDumpResponse = List<Movie>
 // Login credentials for authorization
 data class AuthCredentials(val username: String, val password: String)
 
-class WebApiService(val root: String) {
-    val gson = Gson()
-    val requestInterface = HttpRequestInterface(root)
+class WebApiService(root: String) {
+    private val gson = Gson()
+    private val requestInterface = HttpRequestInterface(root)
 
     companion object {
         // List of endpoints for all services

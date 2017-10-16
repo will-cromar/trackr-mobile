@@ -13,8 +13,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        title = "Login"
-
         loginButton.setOnClickListener {
             // TODO: Actually save the user's credentials and do things with them
             doAsync {

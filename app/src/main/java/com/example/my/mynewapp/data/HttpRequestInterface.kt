@@ -26,14 +26,14 @@ fun OutputStream.writeAllData(data: String) {
 }
 
 /**
- * Extension function to deal with the quirk that when the HTTP response code is 200 (OK), data
+ * Extension property to deal with the quirk that when the HTTP response code is 200 (OK), body data
  * comes in through the input stream. Otherwise, it comes in through the error stream.
  */
-fun HttpURLConnection.getResponseStream() =
-        when(this.responseCode) {
+val HttpURLConnection.responseBodyStream: InputStream
+    get() = when(this.responseCode) {
             200 -> inputStream
             else -> errorStream
-        }
+    }
 
 // Parameter to an HTTP GET request
 typealias GetParam = Pair<String, String>
@@ -48,12 +48,12 @@ fun constructUrlString(root: String, endpoint: String, vararg params: GetParam) 
 
 
 // MIME type for JSON
-val JSON_TYPE = "application/json"
+val jsonType = "application/json"
 
 /**
  * Provides common HTTP methods for remote web server.
  */
-class HttpRequestInterface(val root : String) {
+class HttpRequestInterface(private val root : String) {
 
     fun get(endpoint: String, vararg params: GetParam, authHeader: String? = null) : String {
         val url = constructUrlString(root, endpoint, *params)
@@ -65,7 +65,7 @@ class HttpRequestInterface(val root : String) {
                 setRequestProperty("Authorization", authHeader)
             }
 
-            val responseBody = client.getResponseStream().readAll()
+            val responseBody = client.responseBodyStream.readAll()
             Log.i("http", responseBody)
             return responseBody
         } finally {
@@ -73,7 +73,7 @@ class HttpRequestInterface(val root : String) {
         }
     }
 
-    fun post(endpoint: String, body: String, contentHeader: String = JSON_TYPE, authHeader: String? = null) : String {
+    fun post(endpoint: String, body: String, contentHeader: String = jsonType, authHeader: String? = null) : String {
         val url = constructUrlString(root, endpoint)
         Log.i("http", url)
 
@@ -82,20 +82,20 @@ class HttpRequestInterface(val root : String) {
             client.apply {
                 requestMethod = "POST"
                 setRequestProperty("Authorization", authHeader)
-                setRequestProperty("Content-Type", contentHeader);
-                setRequestProperty("Accept", JSON_TYPE);
-                setDoOutput(true);
-                setDoInput(true);
+                setRequestProperty("Content-Type", contentHeader)
+                setRequestProperty("Accept", jsonType)
+                doOutput = true
+                doInput = true
             }
 
             client.outputStream.writeAllData(body)
 
             val responseCode = client.responseCode
-            Log.i("http", "STATUS: ${responseCode}");
+            Log.i("http", "STATUS: $responseCode")
 
-            val responseBody = client.getResponseStream().readAll()
+            val responseBody = client.responseBodyStream.readAll()
             Log.i("http", responseBody)
-            return responseBody;
+            return responseBody
         } finally {
             client.disconnect()
         }

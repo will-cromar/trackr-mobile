@@ -5,7 +5,6 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.MenuItemCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.view.LayoutInflater
@@ -27,23 +26,24 @@ class SplashPageActivity : AppCompatActivity() {
         val NOTIFICATIONS_PAGE_INDEX = 2
     }
 
-    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                splashFragmentPager.currentItem = HOME_PAGE_INDEX
-                return@OnNavigationItemSelectedListener true
+    private val onNavigationItemSelectedListener =
+            BottomNavigationView.OnNavigationItemSelectedListener { item ->
+                when (item.itemId) {
+                    R.id.navigation_home -> {
+                        splashFragmentPager.currentItem = HOME_PAGE_INDEX
+                        return@OnNavigationItemSelectedListener true
+                    }
+                    R.id.navigation_dashboard -> {
+                        splashFragmentPager.currentItem = BROWSE_PAGE_INDEX
+                        return@OnNavigationItemSelectedListener true
+                    }
+                    R.id.navigation_notifications -> {
+                        splashFragmentPager.currentItem = NOTIFICATIONS_PAGE_INDEX
+                        return@OnNavigationItemSelectedListener true
+                    }
+                }
+                false
             }
-            R.id.navigation_dashboard -> {
-                splashFragmentPager.currentItem = BROWSE_PAGE_INDEX
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_notifications -> {
-                splashFragmentPager.currentItem = NOTIFICATIONS_PAGE_INDEX
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
 
     /**
      * Controls main layout.
@@ -65,22 +65,22 @@ class SplashPageActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.app_bar, menu)
 
-        val searchItem = menu?.findItem(R.id.action_search)
-        val searchView = MenuItemCompat.getActionView(searchItem) as SearchView
+        val searchView = menu?.findItem(R.id.action_search)?.actionView!! as SearchView
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                startActivity<SearchResultsActivity>(EXTRA_QUERY to "{'search': '$query'}")
+                // query has to be non-null
+                startActivity<SearchResultsActivity>(EXTRA_QUERY to query!!)
                 return true
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean = true
+            override fun onQueryTextChange(newText: String?): Boolean = false
         })
 
-        val menuItem = menu?.findItem(R.id.action_profile)!!
+        val menuItem = menu.findItem(R.id.action_profile)!!
         menuItem.setOnMenuItemClickListener {
-            startActivity<LoginActivity>();
-            true;
+            startActivity<LoginActivity>()
+            true
         }
 
         return super.onCreateOptionsMenu(menu)
