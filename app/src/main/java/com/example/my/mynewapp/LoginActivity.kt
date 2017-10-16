@@ -22,12 +22,17 @@ class LoginActivity : AppCompatActivity() {
                 val credentials = AuthCredentials(username, password)
 
                 val authorization = webApi.authenticate(credentials)
-                val who = webApi.whoAmI(authorization)
 
-                val res = "You logged in as ${who.username}!"
+                val message = when (authorization.access_token) {
+                    null -> authorization.description!! // Show error message when authorization fails
+                    else -> {
+                        val who = webApi.whoAmI(authorization)
+                        "You logged in as '${who.username}'!"
+                    }
+                }
 
                 uiThread {
-                    startActivity<DisplayMessageActivity>(EXTRA_MESSAGE to res)
+                    startActivity<DisplayMessageActivity>(EXTRA_MESSAGE to message)
                 }
             }
         }
