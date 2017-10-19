@@ -10,7 +10,10 @@ open class JsonResponse(val status_code: String? = null,
                         val description: String? = null)
 
 // Contains a JWT auth token
-data class AuthResponse(val access_token: String?) : JsonResponse()
+data class AuthResponse(val access_token: String?) : JsonResponse() {
+    val jwtToken: String
+        get() = "JWT $access_token"
+}
 
 // Contains the username associated with a "Who am I?" request
 data class WhoAmIResponse(val username: String?) : JsonResponse()
@@ -49,7 +52,7 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
     }
 
     fun whoAmI(authorization: AuthResponse) : WhoAmIResponse {
-        val token = "JWT ${authorization.access_token}"
+        val token = authorization.jwtToken
         val responseJson = requestInterface.get(WHO_ENDPOINT, authHeader = token)
 
         return gson.fromJson<WhoAmIResponse>(responseJson, WhoAmIResponse::class.java)

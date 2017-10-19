@@ -16,5 +16,6 @@ data class Movie(val name: String, val releaseDate: Long) : SearchResult {
     override val title: String
             get() = name
     override val subtitle: String
+            // Scale seconds to milliseconds
             get() = dateFormat.format(releaseDate * 1000L)
 }
