@@ -14,16 +14,19 @@ import com.example.my.mynewapp.data.*
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_search_results_page.*
 import org.jetbrains.anko.*
+import javax.inject.Inject
 
 
 const val EXTRA_QUERY = "query"
 
 class SearchResultsActivity : AppCompatActivity() {
-    private val webApi = WebApiService("https://limitless-dusk-74218.herokuapp.com/")
+    @Inject lateinit var webApi: WebApiService
+    @Inject lateinit var gson: Gson
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_results_page)
+        (application as MainApplication).component.inject(this)
 
         val query : String = intent.getStringExtra(EXTRA_QUERY)
 
@@ -37,7 +40,7 @@ class SearchResultsActivity : AppCompatActivity() {
                 val results = webApi.dataDump()
 
                 uiThread {
-                    moviesList.adapter = MoviesRecyclerViewAdapter(context, results)
+                    moviesList.adapter = MoviesRecyclerViewAdapter(results)
                     moviesList.layoutManager = LinearLayoutManager(context)
                 }
             } catch (e: Exception) {
@@ -54,7 +57,9 @@ class SearchResultsActivity : AppCompatActivity() {
         }
     }
 
-    class MoviesRecyclerViewAdapter(val context: Context, val movies: List<SearchResult>) : RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder>() {
+    inner class MoviesRecyclerViewAdapter(private val movies: List<SearchResult>) : RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder>() {
+        val context: Context = this@SearchResultsActivity
+
         override fun getItemCount() = movies.size
 
         override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
@@ -71,13 +76,13 @@ class SearchResultsActivity : AppCompatActivity() {
                 title.text = feedItem.title
                 subtitle.text = feedItem.subtitle
                 itemView.setOnClickListener {
-                    val json = Gson().toJson(feedItem)
+                    val json = gson.toJson(feedItem)
                     context.startActivity<MovieDetailsActivity>(EXTRA_MESSAGE to json)
                 }
             }
         }
 
-        class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+        inner class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
             val title: TextView = itemView!!.findViewById(R.id.movieName)
             val subtitle: TextView = itemView!!.findViewById(R.id.movieSubtitle)
         }

@@ -5,6 +5,8 @@ import android.util.Log
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
+import javax.inject.Inject
+import javax.inject.Named
 
 
 // Extension function that makes it easier to read an entire multi-line stream
@@ -53,7 +55,7 @@ val jsonType = "application/json"
 /**
  * Provides common HTTP methods for remote web server.
  */
-class HttpRequestInterface(private val root : String) {
+class HttpClient @Inject constructor(@Named("urlRoot") private val root : String) {
 
     fun get(endpoint: String, vararg params: GetParam, authHeader: String? = null) : String {
         val url = constructUrlString(root, endpoint, *params)

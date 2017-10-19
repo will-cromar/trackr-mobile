@@ -5,13 +5,15 @@ import android.os.Bundle
 import com.example.my.mynewapp.data.*
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.*
+import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
-    private val webApi = WebApiService("https://limitless-dusk-74218.herokuapp.com/")
+    @Inject lateinit var webApi: WebApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        (application as MainApplication).component.inject(this)
 
         loginButton.setOnClickListener {
             // TODO: Actually save the user's credentials and do things with them

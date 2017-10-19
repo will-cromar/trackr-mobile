@@ -6,16 +6,19 @@ import android.support.v7.app.AppCompatActivity
 import com.example.my.mynewapp.data.Movie
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_movie_details.*
+import javax.inject.Inject
 
 class MovieDetailsActivity : AppCompatActivity() {
+    @Inject lateinit var gson: Gson
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_details)
+        (application as MainApplication).component.inject(this)
         setSupportActionBar(toolbar)
 
         val json = intent.getStringExtra(EXTRA_MESSAGE)
-        val movie : Movie = Gson().fromJson<Movie>(json, Movie::class.java)
+        val movie : Movie = gson.fromJson<Movie>(json, Movie::class.java)
 
         title = movie.name
 

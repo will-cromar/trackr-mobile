@@ -2,6 +2,7 @@ package com.example.my.mynewapp.data
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import javax.inject.Inject
 
 // Any JSON response from the server may have error information defined
 open class JsonResponse(val status_code: String? = null,
@@ -20,9 +21,9 @@ typealias DataDumpResponse = List<Movie>
 // Login credentials for authorization
 data class AuthCredentials(val username: String, val password: String)
 
-class WebApiService(root: String) {
-    private val gson = Gson()
-    private val requestInterface = HttpRequestInterface(root)
+class WebApiService @Inject constructor(private val requestInterface: HttpClient,
+                                        private val gson: Gson) {
+//    private val gson = Gson()
 
     companion object {
         // List of endpoints for all services
