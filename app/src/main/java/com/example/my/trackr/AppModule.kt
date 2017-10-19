@@ -4,6 +4,7 @@ import android.app.Application
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -12,7 +13,7 @@ class AppModule(private val app: Application) {
     @Provides @Singleton
     fun provideApplication() = app
 
-    @Provides
+    @Provides @Reusable
     fun provideGson() = Gson()
 
     @Provides @Named("urlRoot")
