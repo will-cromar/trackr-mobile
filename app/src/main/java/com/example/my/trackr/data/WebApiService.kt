@@ -1,4 +1,4 @@
-package com.example.my.mynewapp.data
+package com.example.my.trackr.data
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

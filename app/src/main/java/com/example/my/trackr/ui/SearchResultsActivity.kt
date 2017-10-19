@@ -1,4 +1,4 @@
-package com.example.my.mynewapp
+package com.example.my.trackr.ui
 
 import android.content.Context
 import android.os.Bundle
@@ -10,7 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import com.example.my.mynewapp.data.*
+import com.example.my.trackr.MainApplication
+import com.example.my.trackr.R
+import com.example.my.trackr.data.*
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_search_results_page.*
 import org.jetbrains.anko.*

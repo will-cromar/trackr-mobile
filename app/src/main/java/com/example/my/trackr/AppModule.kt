@@ -1,4 +1,4 @@
-package com.example.my.mynewapp
+package com.example.my.trackr
 
 import android.app.Application
 import com.google.gson.Gson

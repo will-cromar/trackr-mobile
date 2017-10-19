@@ -1,4 +1,4 @@
-package com.example.my.mynewapp
+package com.example.my.trackr.ui
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -12,6 +12,7 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import com.example.my.trackr.R
 import kotlinx.android.synthetic.main.activity_splash_page.*
 import kotlinx.android.synthetic.main.fragment_splash_search.view.*
 import kotlinx.android.synthetic.main.row_browse.view.*

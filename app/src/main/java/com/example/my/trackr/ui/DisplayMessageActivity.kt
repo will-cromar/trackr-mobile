@@ -1,7 +1,8 @@
-package com.example.my.mynewapp
+package com.example.my.trackr.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.example.my.trackr.R
 import kotlinx.android.synthetic.main.activity_display_message.*
 
 const val EXTRA_MESSAGE = "message"

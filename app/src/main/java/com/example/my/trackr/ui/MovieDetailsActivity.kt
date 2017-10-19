@@ -1,9 +1,11 @@
-package com.example.my.mynewapp
+package com.example.my.trackr.ui
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
-import com.example.my.mynewapp.data.Movie
+import com.example.my.trackr.MainApplication
+import com.example.my.trackr.R
+import com.example.my.trackr.data.Movie
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_movie_details.*
 import javax.inject.Inject

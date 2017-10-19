@@ -1,8 +1,10 @@
-package com.example.my.mynewapp
+package com.example.my.trackr.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.example.my.mynewapp.data.*
+import com.example.my.trackr.MainApplication
+import com.example.my.trackr.R
+import com.example.my.trackr.data.*
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.*
 import javax.inject.Inject
