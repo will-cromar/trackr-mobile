@@ -6,12 +6,14 @@ import android.support.v7.app.AppCompatActivity
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
 import com.example.my.trackr.data.Movie
+import com.example.my.trackr.data.UserSessionManager
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_movie_details.*
 import javax.inject.Inject
 
 class MovieDetailsActivity : AppCompatActivity() {
     @Inject lateinit var gson: Gson
+    @Inject lateinit var sessionManager: UserSessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +28,8 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         // TODO: Actually subscribe
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Subscribed! (Not really)", Snackbar.LENGTH_LONG)
+            val message = "Added ${movie.name} to ${sessionManager.username}'s subscriptions!"
+            Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
     }

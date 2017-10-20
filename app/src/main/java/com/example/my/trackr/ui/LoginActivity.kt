@@ -2,6 +2,7 @@ package com.example.my.trackr.ui
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
 import com.example.my.trackr.data.*
@@ -10,7 +11,7 @@ import org.jetbrains.anko.*
 import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity() {
-    @Inject lateinit var webApi: WebApiService
+    @Inject lateinit var sessionManager: UserSessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,25 +19,24 @@ class LoginActivity : AppCompatActivity() {
         (application as MainApplication).component.inject(this)
 
         loginButton.setOnClickListener {
-            // TODO: Actually save the user's credentials and do things with them
             doAsync {
                 val username = usernameBox.text.toString()
                 val password = passwordBox.text.toString()
 
-                val credentials = AuthCredentials(username, password)
-
-                val authorization = webApi.authenticate(credentials)
-
-                val message = when (authorization.access_token) {
-                    null -> authorization.description!! // Show error message when authorization fails
-                    else -> {
-                        val who = webApi.whoAmI(authorization)
-                        "You logged in as '${who.username}'!"
-                    }
+                var message: String
+                try {
+                    sessionManager.attemptLogin(username, password)
+                    message = "You logged in as ${sessionManager.username}!"
+                } catch (e: RuntimeException) {
+                    message = e.message!!
                 }
 
                 uiThread {
-                    startActivity<DisplayMessageActivity>(EXTRA_MESSAGE to message)
+                    Toast.makeText(this@LoginActivity, message, Toast.LENGTH_LONG).show()
+
+                    if (sessionManager.hasActiveSession){
+                        finish()
+                    }
                 }
             }
         }

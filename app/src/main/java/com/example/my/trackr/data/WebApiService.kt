@@ -26,7 +26,6 @@ data class AuthCredentials(val username: String, val password: String)
 
 class WebApiService @Inject constructor(private val requestInterface: HttpClient,
                                         private val gson: Gson) {
-//    private val gson = Gson()
 
     companion object {
         // List of endpoints for all services
