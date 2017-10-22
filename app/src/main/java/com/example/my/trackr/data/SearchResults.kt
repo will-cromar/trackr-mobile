@@ -19,3 +19,14 @@ data class Movie(val name: String, val releaseDate: Long) : SearchResult {
             // Scale seconds to milliseconds
             get() = dateFormat.format(releaseDate * 1000L)
 }
+
+// Represents a cast or crew member
+data class Person(val personId: Long, val name: String)
+
+// Represents a genre
+data class Genre(val genreId: Long, val genre: String)
+
+// Represent a movie or TV show
+data class Listing(val title: String, val description: String, val releaseDate: Long,
+                   val actors: List<Person>, val writers: List<Person>, val directors: List<Person>,
+                   val genres: List<Genre>)

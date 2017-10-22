@@ -24,6 +24,9 @@ typealias DataDumpResponse = List<Movie>
 // Login credentials for authorization
 data class AuthCredentials(val username: String, val password: String)
 
+// Listings for shows the user has subscribed to
+data class SubscriptionsResponse(val subscriptions: List<Listing>)
+
 class WebApiService @Inject constructor(private val requestInterface: HttpClient,
                                         private val gson: Gson) {
 
@@ -32,6 +35,7 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
         val DATA_DUMP_ENDPOINT = "datadump"
         val AUTH_ENDPOINT = "auth"
         val WHO_ENDPOINT = "api/whoami"
+        val SUBSCRIPTIONS_ENDPOINT = "api/subscriptions"
     }
 
     fun dataDump(): DataDumpResponse {
@@ -55,5 +59,12 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
         val responseJson = requestInterface.get(WHO_ENDPOINT, authHeader = token)
 
         return gson.fromJson<WhoAmIResponse>(responseJson, WhoAmIResponse::class.java)
+    }
+
+    fun subscriptions(authorization: AuthResponse) : SubscriptionsResponse {
+        val token = authorization.jwtToken
+        val responseJson = requestInterface.get(SUBSCRIPTIONS_ENDPOINT, authHeader = token)
+
+        return gson.fromJson<SubscriptionsResponse>(responseJson, SubscriptionsResponse::class.java)
     }
 }
