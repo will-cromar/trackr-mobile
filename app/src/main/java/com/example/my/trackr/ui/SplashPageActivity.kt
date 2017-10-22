@@ -12,11 +12,17 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
+import com.example.my.trackr.data.UserSessionManager
+import com.example.my.trackr.data.WebApiService
 import kotlinx.android.synthetic.main.activity_splash_page.*
+import kotlinx.android.synthetic.main.fragment_splash_reminders.view.*
 import kotlinx.android.synthetic.main.fragment_splash_search.view.*
 import kotlinx.android.synthetic.main.row_browse.view.*
+import org.jetbrains.anko.doAsyncResult
 import org.jetbrains.anko.startActivity
+import javax.inject.Inject
 
 class SplashPageActivity : AppCompatActivity() {
 
@@ -27,37 +33,37 @@ class SplashPageActivity : AppCompatActivity() {
         val NOTIFICATIONS_PAGE_INDEX = 2
     }
 
-    private val onNavigationItemSelectedListener =
-            BottomNavigationView.OnNavigationItemSelectedListener { item ->
-                when (item.itemId) {
-                    R.id.navigation_home -> {
-                        splashFragmentPager.currentItem = HOME_PAGE_INDEX
-                        return@OnNavigationItemSelectedListener true
-                    }
-                    R.id.navigation_dashboard -> {
-                        splashFragmentPager.currentItem = BROWSE_PAGE_INDEX
-                        return@OnNavigationItemSelectedListener true
-                    }
-                    R.id.navigation_notifications -> {
-                        splashFragmentPager.currentItem = NOTIFICATIONS_PAGE_INDEX
-                        return@OnNavigationItemSelectedListener true
-                    }
-                }
-                false
-            }
-
     /**
      * Controls main layout.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_page)
+        (application as MainApplication).component.inject(this)
 
         splashFragmentPager.adapter = SplashFragmentPagerAdapter(supportFragmentManager)
 
         setSupportActionBar(splashToolbar)
 
-        navigation.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        // Listener for bottom navigation bar
+        navigation.setOnNavigationItemSelectedListener(
+                BottomNavigationView.OnNavigationItemSelectedListener { item ->
+                    when (item.itemId) {
+                        R.id.navigation_home -> {
+                            splashFragmentPager.currentItem = HOME_PAGE_INDEX
+                            return@OnNavigationItemSelectedListener true
+                        }
+                        R.id.navigation_dashboard -> {
+                            splashFragmentPager.currentItem = BROWSE_PAGE_INDEX
+                            return@OnNavigationItemSelectedListener true
+                        }
+                        R.id.navigation_notifications -> {
+                            splashFragmentPager.currentItem = NOTIFICATIONS_PAGE_INDEX
+                            return@OnNavigationItemSelectedListener true
+                        }
+                    }
+                    false
+                })
     }
 
     /**
@@ -88,7 +94,7 @@ class SplashPageActivity : AppCompatActivity() {
     }
 
     /**
-     * Adapter for bottom navigation bar.
+     * Adapter to display fragments in main display area.
      */
     class SplashFragmentPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
@@ -116,11 +122,11 @@ class SplashBrowseFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater!!.inflate(R.layout.fragment_splash_search, container, false)
+        val viewGroup = inflater!!.inflate(R.layout.fragment_splash_search, container, false)
 
-        view.genresList.adapter = BrowseListAdapter(genres)
+        viewGroup.genresList.adapter = BrowseListAdapter(genres)
 
-        return view
+        return viewGroup
     }
 
     private class BrowseListAdapter(val rows : List<String>) : BaseAdapter() {
@@ -139,8 +145,27 @@ class SplashBrowseFragment : Fragment() {
 }
 
 class SplashNotificationsFragment : Fragment() {
+    @Inject lateinit var sessionManager: UserSessionManager
+    @Inject lateinit var webApi: WebApiService
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.fragment_splash_reminders, container, false)
+        val viewGroup = inflater!!.inflate(R.layout.fragment_splash_reminders, container, false)
+        (activity.application as MainApplication).component.inject(this)
+
+        // Bad for 2 reasons:
+        // 1. It's just dumping the parsed JSON response from the server
+        // 2. Blindly getting the future from doAsyncResult blocks the main thread
+        // TODO: Do better.
+        viewGroup.textView3.text = when(sessionManager.hasActiveSession) {
+            false -> "Log in for notifications!"
+            true -> {
+                doAsyncResult {
+                    "Notifications for will: ${webApi.subscriptions(sessionManager.getToken())}"
+                }.get()
+            }
+        }
+
+        return viewGroup
     }
 }
