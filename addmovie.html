@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+    <form action="/postmovie" method="post" name="postmovie">
+    {{ form.hidden_tag() }}
+    <p>
+        Title: {{ form.title(size=60) }}<br>
+        ID: {{ form.listing_id() }}<br>
+        Release Date: {{ form.release_date() }}<br>
+        Genre: {{ form.genre() }}<br><br>
+        Writers: {{ form.writers() }}<br>
+        Directors: {{ form.directors() }}<br>
+        Actors: {{ form.actors() }}<br><br>
+        Description: {{ form.description() }}<br>
+
+
+
+        <input type="submit" value="Post"><br>
+    </p>
+    <!-- {% for movie in movies %}
+    <div><p>[{{ movie.media_id }}] {{ movie.name }} @ <b>{{ movie.releaseDate }}.</b> (Posted by {{ movie.author }})</p></div>
+    {% endfor %} -->
+{% endblock %}
