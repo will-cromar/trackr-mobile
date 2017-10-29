@@ -73,7 +73,6 @@ class SplashPageActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.app_bar, menu)
 
         val searchView = menu?.findItem(R.id.action_search)?.actionView!! as SearchView
-
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 // query has to be non-null

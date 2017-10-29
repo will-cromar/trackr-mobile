@@ -3,6 +3,7 @@
     package="com.example.my.trackr">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name="com.example.my.trackr.MainApplication"
@@ -35,6 +36,11 @@
         <activity
             android:name="com.example.my.trackr.ui.LoginActivity"
             android:label="Sign in" />
+
+        <service
+            android:name=".service.NotificationCheckerService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true" />
     </application>
 
 </manifest>

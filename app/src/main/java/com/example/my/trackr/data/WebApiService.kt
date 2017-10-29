@@ -27,6 +27,10 @@ data class AuthCredentials(val username: String, val password: String)
 // Listings for shows the user has subscribed to
 data class SubscriptionsResponse(val subscriptions: List<Listing>)
 
+// Represents notifications from the user's inbox on the server
+data class Notification(val listing_id: Long, val message: String, val time: Long)
+data class NotificationsResponse(val notifications: List<Notification>)
+
 class WebApiService @Inject constructor(private val requestInterface: HttpClient,
                                         private val gson: Gson) {
 
@@ -36,6 +40,7 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
         val AUTH_ENDPOINT = "auth"
         val WHO_ENDPOINT = "api/whoami"
         val SUBSCRIPTIONS_ENDPOINT = "api/subscriptions"
+        val NOTIFICATIONS_ENDPOINT = "api/notifications"
     }
 
     fun dataDump(): DataDumpResponse {
@@ -47,7 +52,7 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
         return gson.fromJson<DataDumpResponse>(json, listType)
     }
 
-    fun authenticate(credentials: AuthCredentials): AuthResponse {
+    fun authenticate(credentials: AuthCredentials) : AuthResponse {
         val credentialsJson = gson.toJson(credentials)
         val responseJson = requestInterface.post(AUTH_ENDPOINT, credentialsJson)
 
@@ -66,5 +71,15 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
         val responseJson = requestInterface.get(SUBSCRIPTIONS_ENDPOINT, authHeader = token)
 
         return gson.fromJson<SubscriptionsResponse>(responseJson, SubscriptionsResponse::class.java)
+    }
+
+    // TODO: Uncomment actual implementation when endpoint is added to server
+    fun notifications(authorization: AuthResponse) : NotificationsResponse {
+//        val token = authorization.jwtToken
+//        val responseJson = requestInterface.get(NOTIFICATIONS_ENDPOINT, authHeader = token)
+//
+//        return gson.fromJson<NotificationsResponse>(responseJson, NotificationsResponse::class.java)
+        return NotificationsResponse(listOf(
+                Notification(1, "You have a notification!", 1509395224)))
     }
 }
