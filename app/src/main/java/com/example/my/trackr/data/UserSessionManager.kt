@@ -28,6 +28,17 @@ class UserSessionManager @Inject constructor(private val webApi: WebApiService) 
         }
     }
 
+    // Attempt to sign up and log in with given credentials
+    fun attempSignUp(username: String, password: String) {
+        val credentials = AuthCredentials(username, password)
+        val response = webApi.createAccount(credentials)
+
+        when (response.status_code) {
+            "200" -> attemptLogin(credentials.username, credentials.password)
+            else -> throw IllegalArgumentException(response.description)
+        }
+    }
+
     // Release current user session information
     fun logout() {
         username = null

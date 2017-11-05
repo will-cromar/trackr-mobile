@@ -40,5 +40,28 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+
+        createAccountButton.setOnClickListener {
+            doAsync {
+                val username = usernameBox.text.toString()
+                val password = passwordBox.text.toString()
+
+                var message: String
+                try {
+                    sessionManager.attempSignUp(username, password)
+                    message = "Account created for ${sessionManager.username}!"
+                } catch (e: RuntimeException) {
+                    message = e.message!!
+                }
+
+                uiThread {
+                    Toast.makeText(this@LoginActivity, message, Toast.LENGTH_LONG).show()
+
+                    if (sessionManager.hasActiveSession){
+                        finish()
+                    }
+                }
+            }
+        }
     }
 }

@@ -21,6 +21,9 @@ data class WhoAmIResponse(val username: String?) : JsonResponse()
 // Contains a list of all content in the database
 typealias DataDumpResponse = List<Movie>
 
+// Server gives generic status code response for create account
+typealias CreateAccountResponse = JsonResponse
+
 // Login credentials for authorization
 data class AuthCredentials(val username: String, val password: String)
 
@@ -38,6 +41,7 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
         // List of endpoints for all services
         val DATA_DUMP_ENDPOINT = "datadump"
         val AUTH_ENDPOINT = "auth"
+        val CREATE_ACCOUNT_ENDPOINT = "api/createaccount"
         val WHO_ENDPOINT = "api/whoami"
         val SUBSCRIPTIONS_ENDPOINT = "api/subscriptions"
         val NOTIFICATIONS_ENDPOINT = "api/notifications"
@@ -57,6 +61,13 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
         val responseJson = requestInterface.post(AUTH_ENDPOINT, credentialsJson)
 
         return gson.fromJson<AuthResponse>(responseJson, AuthResponse::class.java)
+    }
+
+    fun createAccount(credentials: AuthCredentials) : CreateAccountResponse {
+        val credentialsJson = gson.toJson(credentials)
+        val responseJson = requestInterface.post(CREATE_ACCOUNT_ENDPOINT, credentialsJson)
+
+        return gson.fromJson<AuthResponse>(responseJson, CreateAccountResponse::class.java)
     }
 
     fun whoAmI(authorization: AuthResponse) : WhoAmIResponse {

@@ -104,4 +104,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_default_profile">Profile</string>
     <string name="notification_channel_name">default_channel</string>
+    <string name="login_text">Log in</string>
+    <string name="create_account_text">Create account</string>
 </resources>
