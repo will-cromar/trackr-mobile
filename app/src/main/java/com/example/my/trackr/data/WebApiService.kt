@@ -73,13 +73,10 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
         return gson.fromJson<SubscriptionsResponse>(responseJson, SubscriptionsResponse::class.java)
     }
 
-    // TODO: Uncomment actual implementation when endpoint is added to server
     fun notifications(authorization: AuthResponse) : NotificationsResponse {
-//        val token = authorization.jwtToken
-//        val responseJson = requestInterface.get(NOTIFICATIONS_ENDPOINT, authHeader = token)
-//
-//        return gson.fromJson<NotificationsResponse>(responseJson, NotificationsResponse::class.java)
-        return NotificationsResponse(listOf(
-                Notification(1, "You have a notification!", 1509395224)))
+        val token = authorization.jwtToken
+        val responseJson = requestInterface.get(NOTIFICATIONS_ENDPOINT, authHeader = token)
+
+        return gson.fromJson<NotificationsResponse>(responseJson, NotificationsResponse::class.java)
     }
 }

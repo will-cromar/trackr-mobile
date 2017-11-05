@@ -1,10 +1,13 @@
 package com.example.my.trackr
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
+import android.os.Build
 import com.example.my.trackr.service.NotificationCheckerService
 
 class MainApplication : Application() {
@@ -18,6 +21,15 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         component.inject(this)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(getString(R.string.notification_channel_name),
+                    "Everything",
+                    NotificationManager.IMPORTANCE_DEFAULT)
+            notificationManager.createNotificationChannel(channel)
+        }
 
         val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
         jobScheduler.schedule(
