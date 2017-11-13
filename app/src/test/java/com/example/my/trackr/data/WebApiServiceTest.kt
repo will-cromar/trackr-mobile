@@ -75,44 +75,44 @@ class WebApiServiceTest {
                         "    {\n" +
                         "      \"title\": \"wlyUPieAGrQNIlkbmySd\",\n" +
                         "      \"description\": \"vGkKzmIaNOfwjXAcmSxPvGkKzmIaNOfwjXAcmSxPvGkKzmIaNOfwjXAcmSxPvGkKzmIaNOfwjXAcmSxPvGkKzmIaNOfwjXAcmSxPvGkKzmIaNOfwjXAcmSxPvGkKzmIaNOfwjXAcmSxPvGkKzmIaNOfwjXAcmSxPvGkKzmIaNOfwjXAcmSxPvGkKzmIaNOfwjXAcmSxP\",\n" +
-                        "      \"releaseDate\": 1511271457,\n" +
+                        "      \"release_date\": 1511271457,\n" +
                         "      \"actors\": [\n" +
                         "        {\n" +
-                        "          \"personId\": 19,\n" +
+                        "          \"person_id\": 19,\n" +
                         "          \"name\": \"LpqvupgvWJUGpCaowEIy\"\n" +
                         "        },\n" +
                         "        {\n" +
-                        "          \"personId\": 11,\n" +
+                        "          \"person_id\": 11,\n" +
                         "          \"name\": \"YECMcEASiXejEJmgUmEG\"\n" +
                         "        },\n" +
                         "        {\n" +
-                        "          \"personId\": 19,\n" +
+                        "          \"person_id\": 19,\n" +
                         "          \"name\": \"LpqvupgvWJUGpCaowEIy\"\n" +
                         "        },\n" +
                         "        {\n" +
-                        "          \"personId\": 17,\n" +
+                        "          \"person_id\": 17,\n" +
                         "          \"name\": \"PlbkrSYoHuZBWfYjYnfw\"\n" +
                         "        },\n" +
                         "        {\n" +
-                        "          \"personId\": 12,\n" +
+                        "          \"person_id\": 12,\n" +
                         "          \"name\": \"vEBWkLmuIpqNdxZZdlnW\"\n" +
                         "        }\n" +
                         "      ],\n" +
                         "      \"writers\": [\n" +
                         "        {\n" +
-                        "          \"personId\": 16,\n" +
+                        "          \"person_id\": 16,\n" +
                         "          \"name\": \"SYQTbMrWPSQnOfTSlQxp\"\n" +
                         "        }\n" +
                         "      ],\n" +
                         "      \"directors\": [\n" +
                         "        {\n" +
-                        "          \"personId\": 13,\n" +
+                        "          \"person_id\": 13,\n" +
                         "          \"name\": \"TTtiRKFZIaQpIWggfCoF\"\n" +
                         "        }\n" +
                         "      ],\n" +
                         "      \"genres\": [\n" +
                         "        {\n" +
-                        "          \"genreId\": 1,\n" +
+                        "          \"genre_id\": 1,\n" +
                         "          \"genre\": \"fake\"\n" +
                         "        }\n" +
                         "      ]\n" +
@@ -120,44 +120,44 @@ class WebApiServiceTest {
                         "    {\n" +
                         "      \"title\": \"RCUMynmHNBGoeooqChmK\",\n" +
                         "      \"description\": \"KdvCvkvVEKSNtasNSXvMKdvCvkvVEKSNtasNSXvMKdvCvkvVEKSNtasNSXvMKdvCvkvVEKSNtasNSXvMKdvCvkvVEKSNtasNSXvMKdvCvkvVEKSNtasNSXvMKdvCvkvVEKSNtasNSXvMKdvCvkvVEKSNtasNSXvMKdvCvkvVEKSNtasNSXvMKdvCvkvVEKSNtasNSXvM\",\n" +
-                        "      \"releaseDate\": 1511397289,\n" +
+                        "      \"release_date\": 1511397289,\n" +
                         "      \"actors\": [\n" +
                         "        {\n" +
-                        "          \"personId\": 15,\n" +
+                        "          \"person_id\": 15,\n" +
                         "          \"name\": \"VCREhgqUPSUkmfOTvGiW\"\n" +
                         "        },\n" +
                         "        {\n" +
-                        "          \"personId\": 17,\n" +
+                        "          \"person_id\": 17,\n" +
                         "          \"name\": \"PlbkrSYoHuZBWfYjYnfw\"\n" +
                         "        },\n" +
                         "        {\n" +
-                        "          \"personId\": 9,\n" +
+                        "          \"person_id\": 9,\n" +
                         "          \"name\": \"LJZfurSmjxvomWxSCcZR\"\n" +
                         "        },\n" +
                         "        {\n" +
-                        "          \"personId\": 5,\n" +
+                        "          \"person_id\": 5,\n" +
                         "          \"name\": \"aLJBnHfwxXTnAjVTpHFh\"\n" +
                         "        },\n" +
                         "        {\n" +
-                        "          \"personId\": 9,\n" +
+                        "          \"person_id\": 9,\n" +
                         "          \"name\": \"LJZfurSmjxvomWxSCcZR\"\n" +
                         "        }\n" +
                         "      ],\n" +
                         "      \"writers\": [\n" +
                         "        {\n" +
-                        "          \"personId\": 12,\n" +
+                        "          \"person_id\": 12,\n" +
                         "          \"name\": \"vEBWkLmuIpqNdxZZdlnW\"\n" +
                         "        }\n" +
                         "      ],\n" +
                         "      \"directors\": [\n" +
                         "        {\n" +
-                        "          \"personId\": 10,\n" +
+                        "          \"person_id\": 10,\n" +
                         "          \"name\": \"YWSizludtZnOxvXZCLip\"\n" +
                         "        }\n" +
                         "      ],\n" +
                         "      \"genres\": [\n" +
                         "        {\n" +
-                        "          \"genreId\": 1,\n" +
+                        "          \"genre_id\": 1,\n" +
                         "          \"genre\": \"fake\"\n" +
                         "        }\n" +
                         "      ]\n" +
@@ -165,44 +165,44 @@ class WebApiServiceTest {
                         "    {\n" +
                         "      \"title\": \"IPLRVYBVEIewTjnrxrTo\",\n" +
                         "      \"description\": \"XvRyMcXldXcbmRGmyfXyXvRyMcXldXcbmRGmyfXyXvRyMcXldXcbmRGmyfXyXvRyMcXldXcbmRGmyfXyXvRyMcXldXcbmRGmyfXyXvRyMcXldXcbmRGmyfXyXvRyMcXldXcbmRGmyfXyXvRyMcXldXcbmRGmyfXyXvRyMcXldXcbmRGmyfXyXvRyMcXldXcbmRGmyfXy\",\n" +
-                        "      \"releaseDate\": 1508965527,\n" +
+                        "      \"release_date\": 1508965527,\n" +
                         "      \"actors\": [\n" +
                         "        {\n" +
-                        "          \"personId\": 15,\n" +
+                        "          \"person_id\": 15,\n" +
                         "          \"name\": \"VCREhgqUPSUkmfOTvGiW\"\n" +
                         "        },\n" +
                         "        {\n" +
-                        "          \"personId\": 3,\n" +
+                        "          \"person_id\": 3,\n" +
                         "          \"name\": \"ZHCJROlbqnkXTqIuVxnm\"\n" +
                         "        },\n" +
                         "        {\n" +
-                        "          \"personId\": 12,\n" +
+                        "          \"person_id\": 12,\n" +
                         "          \"name\": \"vEBWkLmuIpqNdxZZdlnW\"\n" +
                         "        },\n" +
                         "        {\n" +
-                        "          \"personId\": 14,\n" +
+                        "          \"person_id\": 14,\n" +
                         "          \"name\": \"LkGnzVRewoaOHnMCwadT\"\n" +
                         "        },\n" +
                         "        {\n" +
-                        "          \"personId\": 2,\n" +
+                        "          \"person_id\": 2,\n" +
                         "          \"name\": \"KclpemfoHstknWHFiLit\"\n" +
                         "        }\n" +
                         "      ],\n" +
                         "      \"writers\": [\n" +
                         "        {\n" +
-                        "          \"personId\": 5,\n" +
+                        "          \"person_id\": 5,\n" +
                         "          \"name\": \"aLJBnHfwxXTnAjVTpHFh\"\n" +
                         "        }\n" +
                         "      ],\n" +
                         "      \"directors\": [\n" +
                         "        {\n" +
-                        "          \"personId\": 9,\n" +
+                        "          \"person_id\": 9,\n" +
                         "          \"name\": \"LJZfurSmjxvomWxSCcZR\"\n" +
                         "        }\n" +
                         "      ],\n" +
                         "      \"genres\": [\n" +
                         "        {\n" +
-                        "          \"genreId\": 1,\n" +
+                        "          \"genre_id\": 1,\n" +
                         "          \"genre\": \"fake\"\n" +
                         "        }\n" +
                         "      ]\n" +
