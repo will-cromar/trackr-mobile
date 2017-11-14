@@ -13,19 +13,23 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.BaseAdapter
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
+import com.example.my.trackr.data.Genre
 import com.example.my.trackr.data.UserSessionManager
 import com.example.my.trackr.data.WebApiService
 import com.example.my.trackr.service.NotificationCheckerService
 import kotlinx.android.synthetic.main.activity_splash_page.*
+import kotlinx.android.synthetic.main.fragment_splash_browse.view.*
 import kotlinx.android.synthetic.main.fragment_splash_reminders.view.*
-import kotlinx.android.synthetic.main.fragment_splash_search.view.*
 import kotlinx.android.synthetic.main.row_browse.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.doAsyncResult
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.support.v4.startActivity
+import org.jetbrains.anko.uiThread
 import javax.inject.Inject
 
 class SplashPageActivity : AppCompatActivity() {
@@ -132,23 +136,33 @@ class SplashHomeFragment : Fragment() {
 }
 
 class SplashBrowseFragment : Fragment() {
-    private val genres = listOf("List", "Of", "Genres", "To", "Browse")
+    @Inject lateinit var webApi: WebApiService
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val viewGroup = inflater!!.inflate(R.layout.fragment_splash_search, container, false)
+        val viewGroup = inflater!!.inflate(R.layout.fragment_splash_browse, container, false)
+        (activity.application as MainApplication).component.inject(this)
 
-        viewGroup.genresList.adapter = BrowseListAdapter(genres)
+        doAsync {
+            val genres = webApi.genreList()
+
+            uiThread {
+                viewGroup.genresList.adapter = BrowseListAdapter(genres.genres)
+                viewGroup.genresList.onItemClickListener = AdapterView.OnItemClickListener { _, view, _, _ ->
+                    startActivity<SearchResultsActivity>(EXTRA_QUERY to view!!.genreText.text)
+                }
+            }
+        }
 
         return viewGroup
     }
 
-    private class BrowseListAdapter(val rows : List<String>) : BaseAdapter() {
+    private class BrowseListAdapter(val rows : List<Genre>) : BaseAdapter() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View =
                 when (convertView) {
                     null -> LayoutInflater.from(parent!!.context).inflate(R.layout.row_browse, parent, false)
                     else -> convertView
-                }.apply { genreText.text = rows[position] }
+                }.apply { genreText.text = rows[position].genre }
 
         override fun getItem(position: Int) = rows[position]
 

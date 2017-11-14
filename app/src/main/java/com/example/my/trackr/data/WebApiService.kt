@@ -30,6 +30,9 @@ typealias CreateAccountResponse = JsonResponse
 // Listings for shows the user has subscribed to
 data class QueryResponse(val results: List<Listing>)
 
+// Listings for shows the user has subscribed to
+data class GenreListResponse(val genres: List<Genre>)
+
 // Response when new subscription is attempted
 typealias SubscribeResponse = JsonResponse
 
@@ -46,6 +49,7 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
     companion object {
         // List of endpoints for all services
         val QUERY_ENDPOINT = "api/query"
+        val GENRE_LIST_ENDPOINT = "api/genrelist"
         val AUTH_ENDPOINT = "auth"
         val CREATE_ACCOUNT_ENDPOINT = "api/createaccount"
         val WHO_ENDPOINT = "api/whoami"
@@ -64,6 +68,11 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
         val responseJson = requestInterface.post(SUBSCRIBE_ENDPOINT, gson.toJson(request), authHeader = credentials.jwtToken)
 
         return gson.fromJson<SubscribeResponse>(responseJson, SubscribeResponse::class.java)
+    }
+
+    fun genreList(): GenreListResponse {
+        val responseJson = requestInterface.get(GENRE_LIST_ENDPOINT)
+        return gson.fromJson<GenreListResponse>(responseJson, GenreListResponse::class.java)
     }
 
     fun authenticate(credentials: AuthCredentials) : AuthResponse {

@@ -11,6 +11,7 @@ import javax.inject.Singleton
 interface AppComponent {
     fun inject(app: Application)
     fun inject(splashPageActivity: SplashPageActivity)
+    fun inject(splashBrowseFragment: SplashBrowseFragment)
     fun inject(splashNotificationsFragment: SplashNotificationsFragment)
     fun inject(searchResultsActivity: SearchResultsActivity)
     fun inject(movieDetailsActivity: MovieDetailsActivity)
