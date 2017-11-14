@@ -39,10 +39,10 @@ class SearchResultsActivity : AppCompatActivity() {
         val context = this
         doAsync {
             try {
-                val results = webApi.dataDump()
+                val response = webApi.query(query)
 
                 uiThread {
-                    moviesList.adapter = MoviesRecyclerViewAdapter(results)
+                    moviesList.adapter = MoviesRecyclerViewAdapter(response.results)
                     moviesList.layoutManager = LinearLayoutManager(context)
                 }
             } catch (e: Exception) {
@@ -59,7 +59,7 @@ class SearchResultsActivity : AppCompatActivity() {
         }
     }
 
-    inner class MoviesRecyclerViewAdapter(private val movies: List<SearchResult>) : RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder>() {
+    inner class MoviesRecyclerViewAdapter(private val movies: List<Listing>) : RecyclerView.Adapter<MoviesRecyclerViewAdapter.ViewHolder>() {
         val context: Context = this@SearchResultsActivity
 
         override fun getItemCount() = movies.size
@@ -75,8 +75,8 @@ class SearchResultsActivity : AppCompatActivity() {
             val feedItem = movies[position]
 
             holder!!.apply {
-                title.text = feedItem.title
-                subtitle.text = feedItem.subtitle
+                title.text = feedItem.listTitle
+                subtitle.text = feedItem.listSubtitle
                 itemView.setOnClickListener {
                     val json = gson.toJson(feedItem)
                     context.startActivity<MovieDetailsActivity>(EXTRA_MESSAGE to json)

@@ -18,14 +18,14 @@ data class AuthResponse(val access_token: String?) : JsonResponse() {
 // Contains the username associated with a "Who am I?" request
 data class WhoAmIResponse(val username: String?) : JsonResponse()
 
-// Contains a list of all content in the database
-typealias DataDumpResponse = List<Movie>
-
 // Server gives generic status code response for create account
 typealias CreateAccountResponse = JsonResponse
 
 // Login credentials for authorization
 data class AuthCredentials(val username: String, val password: String)
+
+// Listings for shows the user has subscribed to
+data class QueryResponse(val results: List<Listing>)
 
 // Listings for shows the user has subscribed to
 data class SubscriptionsResponse(val subscriptions: List<Listing>)
@@ -39,7 +39,7 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
 
     companion object {
         // List of endpoints for all services
-        val DATA_DUMP_ENDPOINT = "datadump"
+        val QUERY_ENDPOINT = "api/query"
         val AUTH_ENDPOINT = "auth"
         val CREATE_ACCOUNT_ENDPOINT = "api/createaccount"
         val WHO_ENDPOINT = "api/whoami"
@@ -47,13 +47,9 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
         val NOTIFICATIONS_ENDPOINT = "api/notifications"
     }
 
-    fun dataDump(): DataDumpResponse {
-        val json = requestInterface.get(DATA_DUMP_ENDPOINT)
-
-        // HACK: This is a really hideous block, but it is necessary according to the official docs
-        // ref: https://github.com/google/gson/blob/master/UserGuide.md#collections-examples
-        val listType = object : TypeToken<DataDumpResponse>() {}.type
-        return gson.fromJson<DataDumpResponse>(json, listType)
+    fun query(q: String): QueryResponse {
+        val responseJson = requestInterface.get(QUERY_ENDPOINT, "query" to q)
+        return gson.fromJson<QueryResponse>(responseJson, QueryResponse::class.java)
     }
 
     fun authenticate(credentials: AuthCredentials) : AuthResponse {

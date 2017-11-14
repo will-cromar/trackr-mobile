@@ -5,7 +5,7 @@ import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
-import com.example.my.trackr.data.Movie
+import com.example.my.trackr.data.Listing
 import com.example.my.trackr.data.UserSessionManager
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_movie_details.*
@@ -22,13 +22,13 @@ class MovieDetailsActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         val json = intent.getStringExtra(EXTRA_MESSAGE)
-        val movie : Movie = gson.fromJson<Movie>(json, Movie::class.java)
+        val listing = gson.fromJson<Listing>(json, Listing::class.java)
 
-        title = movie.name
+        title = listing.title
 
         // TODO: Actually subscribe
         fab.setOnClickListener { view ->
-            val message = "Added ${movie.name} to ${sessionManager.username}'s subscriptions!"
+            val message = "Added ${listing.title} to ${sessionManager.username}'s subscriptions!"
             Snackbar.make(view, message, Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
