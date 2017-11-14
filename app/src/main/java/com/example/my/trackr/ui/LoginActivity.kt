@@ -23,12 +23,11 @@ class LoginActivity : AppCompatActivity() {
                 val username = usernameBox.text.toString()
                 val password = passwordBox.text.toString()
 
-                var message: String
-                try {
+                val message = try {
                     sessionManager.attemptLogin(username, password)
-                    message = "You logged in as ${sessionManager.username}!"
+                    "You logged in as ${sessionManager.username}!"
                 } catch (e: RuntimeException) {
-                    message = e.message!!
+                    e.message!!
                 }
 
                 uiThread {
@@ -46,12 +45,11 @@ class LoginActivity : AppCompatActivity() {
                 val username = usernameBox.text.toString()
                 val password = passwordBox.text.toString()
 
-                var message: String
-                try {
+                val message = try {
                     sessionManager.attempSignUp(username, password)
-                    message = "Account created for ${sessionManager.username}!"
+                    "Account created for ${sessionManager.username}!"
                 } catch (e: RuntimeException) {
-                    message = e.message!!
+                    e.message!!
                 }
 
                 uiThread {
