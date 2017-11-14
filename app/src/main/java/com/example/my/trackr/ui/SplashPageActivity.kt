@@ -1,5 +1,7 @@
 package com.example.my.trackr.ui
 
+import android.app.job.JobInfo
+import android.content.ComponentName
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
@@ -16,10 +18,12 @@ import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
 import com.example.my.trackr.data.UserSessionManager
 import com.example.my.trackr.data.WebApiService
+import com.example.my.trackr.service.NotificationCheckerService
 import kotlinx.android.synthetic.main.activity_splash_page.*
 import kotlinx.android.synthetic.main.fragment_splash_reminders.view.*
 import kotlinx.android.synthetic.main.fragment_splash_search.view.*
 import kotlinx.android.synthetic.main.row_browse.view.*
+import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.doAsyncResult
 import org.jetbrains.anko.startActivity
 import javax.inject.Inject
@@ -71,8 +75,9 @@ class SplashPageActivity : AppCompatActivity() {
      */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.app_bar, menu)
+        menu!!
 
-        val searchView = menu?.findItem(R.id.action_search)?.actionView!! as SearchView
+        val searchView = menu.findItem(R.id.action_search)?.actionView!! as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 // query has to be non-null
@@ -83,9 +88,19 @@ class SplashPageActivity : AppCompatActivity() {
             override fun onQueryTextChange(newText: String?): Boolean = false
         })
 
-        val menuItem = menu.findItem(R.id.action_profile)!!
-        menuItem.setOnMenuItemClickListener {
+        val profileItem = menu.findItem(R.id.action_profile)!!
+        profileItem.setOnMenuItemClickListener {
             startActivity<LoginActivity>()
+            true
+        }
+
+        val refreshItem = menu.findItem(R.id.action_refresh)!!
+        refreshItem.setOnMenuItemClickListener {
+            (application as MainApplication).jobScheduler.schedule(JobInfo.Builder(
+                    12345,
+                    ComponentName(this, NotificationCheckerService::class.java))
+                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                    .build())
             true
         }
 

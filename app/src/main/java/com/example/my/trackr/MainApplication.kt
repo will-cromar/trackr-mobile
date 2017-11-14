@@ -9,6 +9,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.os.Build
 import com.example.my.trackr.service.NotificationCheckerService
+import kotlinx.coroutines.experimental.Job
 
 class MainApplication : Application() {
     val component: AppComponent by lazy {
@@ -16,6 +17,9 @@ class MainApplication : Application() {
                 .builder()
                 .appModule(AppModule(this))
                 .build()
+    }
+    val jobScheduler: JobScheduler by lazy {
+        getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
     }
 
     override fun onCreate() {
@@ -31,7 +35,6 @@ class MainApplication : Application() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
         jobScheduler.schedule(
                 JobInfo.Builder(12344,
                         ComponentName(this, NotificationCheckerService::class.java))
