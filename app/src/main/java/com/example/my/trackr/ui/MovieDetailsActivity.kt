@@ -3,14 +3,17 @@ package com.example.my.trackr.ui
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
-import com.example.my.trackr.data.Listing
-import com.example.my.trackr.data.SubscribeResponse
-import com.example.my.trackr.data.UserSessionManager
-import com.example.my.trackr.data.WebApiService
+import com.example.my.trackr.data.*
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_movie_details.*
+import kotlinx.android.synthetic.main.content_movie_details.*
+import kotlinx.android.synthetic.main.row_browse.view.*
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 import javax.inject.Inject
@@ -30,6 +33,14 @@ class MovieDetailsActivity : AppCompatActivity() {
         val listing = gson.fromJson<Listing>(json, Listing::class.java)
 
         title = listing.title
+
+        descriptionText.text = listing.description
+        releaseDateText.text = listing.releaseDatePretty
+
+        genresListView.adapter = DetailsListAdapter(listing.genres)
+        directorsListView.adapter = DetailsListAdapter(listing.directors)
+        writersListView.adapter = DetailsListAdapter(listing.writers)
+        actorsListView.adapter = DetailsListAdapter(listing.actors)
 
         fab.setOnClickListener { view ->
             doAsync {
@@ -51,5 +62,19 @@ class MovieDetailsActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    private class DetailsListAdapter(val rows : List<Listable>) : BaseAdapter() {
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View =
+                when (convertView) {
+                    null -> LayoutInflater.from(parent!!.context).inflate(R.layout.row_details, parent, false)
+                    else -> convertView
+                }.apply { genreText.text = rows[position].listTitle }
+
+        override fun getItem(position: Int) = rows[position]
+
+        override fun getItemId(position: Int) = position + 0L
+
+        override fun getCount() = rows.size
     }
 }
