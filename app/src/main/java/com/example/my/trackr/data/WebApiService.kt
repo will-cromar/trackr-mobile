@@ -1,8 +1,14 @@
 package com.example.my.trackr.data
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import javax.inject.Inject
+
+
+// Login credentials for authorization
+data class AuthCredentials(val username: String, val password: String)
+
+// Request for user to subscribe to some content item
+data class SubscribeRequest(val listing_id: Long)
 
 // Any JSON response from the server may have error information defined
 open class JsonResponse(val status_code: String? = null,
@@ -21,14 +27,14 @@ data class WhoAmIResponse(val username: String?) : JsonResponse()
 // Server gives generic status code response for create account
 typealias CreateAccountResponse = JsonResponse
 
-// Login credentials for authorization
-data class AuthCredentials(val username: String, val password: String)
-
 // Listings for shows the user has subscribed to
 data class QueryResponse(val results: List<Listing>)
 
+// Response when new subscription is attempted
+typealias SubscribeResponse = JsonResponse
+
 // Listings for shows the user has subscribed to
-data class SubscriptionsResponse(val subscriptions: List<Listing>)
+data class SubscriptionsResponse(val subscriptions: List<Listing>): JsonResponse()
 
 // Represents notifications from the user's inbox on the server
 data class Notification(val listing_id: Long, val message: String, val time: Long)
@@ -43,6 +49,7 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
         val AUTH_ENDPOINT = "auth"
         val CREATE_ACCOUNT_ENDPOINT = "api/createaccount"
         val WHO_ENDPOINT = "api/whoami"
+        val SUBSCRIBE_ENDPOINT = "api/addsubscription"
         val SUBSCRIPTIONS_ENDPOINT = "api/subscriptions"
         val NOTIFICATIONS_ENDPOINT = "api/notifications"
     }
@@ -50,6 +57,13 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
     fun query(q: String): QueryResponse {
         val responseJson = requestInterface.get(QUERY_ENDPOINT, "query" to q)
         return gson.fromJson<QueryResponse>(responseJson, QueryResponse::class.java)
+    }
+
+    fun subscribe(id: Long, credentials: AuthResponse): SubscribeResponse {
+        val request = SubscribeRequest(id)
+        val responseJson = requestInterface.post(SUBSCRIBE_ENDPOINT, gson.toJson(request), authHeader = credentials.jwtToken)
+
+        return gson.fromJson<SubscribeResponse>(responseJson, SubscribeResponse::class.java)
     }
 
     fun authenticate(credentials: AuthCredentials) : AuthResponse {

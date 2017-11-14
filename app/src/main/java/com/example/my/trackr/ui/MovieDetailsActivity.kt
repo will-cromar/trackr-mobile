@@ -6,13 +6,18 @@ import android.support.v7.app.AppCompatActivity
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
 import com.example.my.trackr.data.Listing
+import com.example.my.trackr.data.SubscribeResponse
 import com.example.my.trackr.data.UserSessionManager
+import com.example.my.trackr.data.WebApiService
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_movie_details.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import javax.inject.Inject
 
 class MovieDetailsActivity : AppCompatActivity() {
     @Inject lateinit var gson: Gson
+    @Inject lateinit var webApi: WebApiService
     @Inject lateinit var sessionManager: UserSessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,11 +31,25 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         title = listing.title
 
-        // TODO: Actually subscribe
         fab.setOnClickListener { view ->
-            val message = "Added ${listing.title} to ${sessionManager.username}'s subscriptions!"
-            Snackbar.make(view, message, Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            doAsync {
+                val message = try {
+                    val resp : SubscribeResponse = webApi.subscribe(listing.listing_id, sessionManager.getToken())
+
+                    when(resp.status_code) {
+                        "200" -> "Added ${listing.title} to ${sessionManager.username}'s subscriptions!"
+                        else -> "Error: ${resp.description}"
+                    }
+                } catch (e: Exception) {
+                    e.message!!
+                }
+
+                uiThread {
+                    Snackbar.make(view, message, Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show()
+                }
+            }
+
         }
     }
 }
