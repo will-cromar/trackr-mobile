@@ -11,7 +11,8 @@ import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
 import com.example.my.trackr.data.UserSessionManager
 import com.example.my.trackr.data.WebApiService
-import com.example.my.trackr.ui.SplashPageActivity
+import com.example.my.trackr.ui.MovieDetailsActivity
+import com.example.my.trackr.ui.extraListingId
 import org.jetbrains.anko.doAsync
 import javax.inject.Inject
 
@@ -36,10 +37,12 @@ class NotificationCheckerService : JobService() {
                                     .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                                     .setContentTitle(n.message)
                                     .setContentText(n.submessage ?: n.timePretty)
-                    val targetIntent = Intent(context, SplashPageActivity::class.java)
+                    val targetIntent = Intent(context, MovieDetailsActivity::class.java)
+                    targetIntent.putExtra(extraListingId, n.listing_id.toString())
+                    targetIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                     val contentIntent = PendingIntent.getActivity(
                             context,
-                            0,
+                            i,
                             targetIntent,
                             PendingIntent.FLAG_UPDATE_CURRENT)
                     builder.setContentIntent(contentIntent)

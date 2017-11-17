@@ -59,6 +59,7 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
     companion object {
         // List of endpoints for all services
         val QUERY_ENDPOINT = "api/query"
+        val GET_LISTING_ENDPOINT = "api/getlisting"
         val GENRE_LIST_ENDPOINT = "api/genrelist"
         val AUTH_ENDPOINT = "auth"
         val CREATE_ACCOUNT_ENDPOINT = "api/createaccount"
@@ -71,6 +72,11 @@ class WebApiService @Inject constructor(private val requestInterface: HttpClient
     fun query(q: String): QueryResponse {
         val responseJson = requestInterface.get(QUERY_ENDPOINT, "query" to q)
         return gson.fromJson<QueryResponse>(responseJson, QueryResponse::class.java)
+    }
+
+    fun getListing(listing_id: String): Listing {
+        val responseJson = requestInterface.get(GET_LISTING_ENDPOINT, "listing_id" to listing_id)
+        return gson.fromJson<Listing>(responseJson, Listing::class.java)
     }
 
     fun subscribe(id: Long, credentials: AuthResponse): SubscribeResponse {

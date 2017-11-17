@@ -3,6 +3,7 @@ package com.example.my.trackr.ui
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,13 @@ import kotlinx.android.synthetic.main.activity_movie_details.*
 import kotlinx.android.synthetic.main.content_movie_details.*
 import kotlinx.android.synthetic.main.row_details.view.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.doAsyncResult
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.uiThread
 import javax.inject.Inject
+
+val extraListingJson = "LISTING_JSON"
+val extraListingId = "LISTING_ID"
 
 class MovieDetailsActivity : AppCompatActivity() {
     @Inject lateinit var gson: Gson
@@ -31,8 +36,12 @@ class MovieDetailsActivity : AppCompatActivity() {
         (application as MainApplication).component.inject(this)
         setSupportActionBar(toolbar)
 
-        val json = intent.getStringExtra(EXTRA_MESSAGE)
-        val listing = gson.fromJson<Listing>(json, Listing::class.java)
+        Log.w("asdf", intent.extras.toString())
+        val json = intent.getStringExtra(extraListingJson)
+        val listing = when(json) {
+            null -> doAsyncResult { webApi.getListing(intent.getStringExtra(extraListingId)) }.get()
+            else -> gson.fromJson<Listing>(json, Listing::class.java)
+        }
 
         title = listing.title
 

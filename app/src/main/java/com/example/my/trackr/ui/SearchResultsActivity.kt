@@ -79,7 +79,7 @@ class SearchResultsActivity : AppCompatActivity() {
                 subtitle.text = feedItem.listSubtitle
                 itemView.setOnClickListener {
                     val json = gson.toJson(feedItem)
-                    context.startActivity<MovieDetailsActivity>(EXTRA_MESSAGE to json)
+                    context.startActivity<MovieDetailsActivity>(extraListingJson to json)
                 }
             }
         }
