@@ -35,7 +35,7 @@ class NotificationCheckerService : JobService() {
                             NotificationCompat.Builder(context, getString(R.string.notification_channel_name))
                                     .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                                     .setContentTitle(n.message)
-                                    .setContentText("${n.listing_id} ${n.time}")
+                                    .setContentText(n.submessage ?: n.timePretty)
                     val targetIntent = Intent(context, SplashPageActivity::class.java)
                     val contentIntent = PendingIntent.getActivity(
                             context,

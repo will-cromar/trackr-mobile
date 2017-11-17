@@ -1,6 +1,8 @@
 package com.example.my.trackr.data
 
 import com.google.gson.Gson
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 
@@ -40,7 +42,15 @@ typealias SubscribeResponse = JsonResponse
 data class SubscriptionsResponse(val subscriptions: List<Listing>): JsonResponse()
 
 // Represents notifications from the user's inbox on the server
-data class Notification(val listing_id: Long, val message: String, val time: Long)
+data class Notification(val listing_id: Long, val message: String, val time: Long,
+                        val submessage: String?) {
+    companion object {
+        val dateFormat = SimpleDateFormat("MMMM dd @ HH:mm z", Locale.getDefault())
+    }
+
+    val timePretty: String
+        get() = dateFormat.format(time * 1000L)
+}
 data class NotificationsResponse(val notifications: List<Notification>)
 
 class WebApiService @Inject constructor(private val requestInterface: HttpClient,
