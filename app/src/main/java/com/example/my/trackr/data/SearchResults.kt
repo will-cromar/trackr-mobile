@@ -25,12 +25,22 @@ data class Genre(val genre_id: Long, val genre: String): Listable {
         get() = ""
 }
 
+// Represents a particular episode of a TV show
+data class Schedule(val schedule_id: Long, val season: Int, val episode: Int,
+                    val title: String, val date: Long): Listable {
+    override val listTitle: String
+        get() = "S${season}E${episode}: $title"
+    override val listSubtitle: String
+        get() = ""
+}
+
 // Represent a movie or TV show
 data class Listing(val listing_id: Long, val title: String, val description: String,
                    val release_date: Long, val actors: List<Person>, val writers: List<Person>,
-                   val directors: List<Person>, val genres: List<Genre>): Listable {
+                   val directors: List<Person>, val genres: List<Genre>,
+                   val schedules: List<Schedule>?): Listable {
     companion object {
-        val dateFormat = SimpleDateFormat("MMMM dd, yyyy @ HH:mm", Locale.US)
+        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
     }
 
     val releaseDatePretty: String
@@ -40,6 +50,4 @@ data class Listing(val listing_id: Long, val title: String, val description: Str
         get() = title
     override val listSubtitle: String
         get() = releaseDatePretty
-
-
 }

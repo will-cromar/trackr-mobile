@@ -52,6 +52,8 @@ class MovieDetailsActivity : AppCompatActivity() {
         writersListView.onItemClickListener = itemClickListener
         actorsListView.adapter = DetailsListAdapter(listing.actors)
         actorsListView.onItemClickListener = itemClickListener
+        episodesListView.adapter = DetailsListAdapter(listing.schedules ?: listOf<Schedule>())
+        episodesListView.onItemClickListener = itemClickListener
 
         fab.setOnClickListener { view ->
             doAsync {

@@ -8,9 +8,10 @@
     tools:context="com.example.my.trackr.ui.MovieDetailsActivity"
     tools:showIn="@layout/activity_movie_details">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/descriptionTitle"
@@ -65,16 +66,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/releaseDateText" />
 
-        <TextView
-            android:id="@+id/actorsTitle"
-            android:layout_width="wrap_content"
+        <com.example.my.trackr.ui.NonScrollListView
+            android:id="@+id/genresListView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Actors"
-            android:textAppearance="@android:style/TextAppearance.Material.Menu"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/writersListView" />
+            app:layout_constraintTop_toBottomOf="@+id/genresTitle" />
 
         <TextView
             android:id="@+id/directorsTitle"
@@ -87,6 +87,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/genresListView" />
 
+        <com.example.my.trackr.ui.NonScrollListView
+            android:id="@+id/directorsListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/directorsTitle" />
+
         <TextView
             android:id="@+id/writersTitle"
             android:layout_width="wrap_content"
@@ -98,27 +108,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/directorsListView" />
 
-        <ListView
-            android:id="@+id/genresListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:scrollbars="none"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/genresTitle" />
-
-        <ListView
-            android:id="@+id/directorsListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:scrollbars="none"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/directorsTitle" />
-
-        <ListView
+        <com.example.my.trackr.ui.NonScrollListView
             android:id="@+id/writersListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -128,7 +118,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/writersTitle" />
 
-        <ListView
+        <TextView
+            android:id="@+id/actorsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Actors"
+            android:textAppearance="@android:style/TextAppearance.Material.Menu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/writersListView" />
+
+        <com.example.my.trackr.ui.NonScrollListView
             android:id="@+id/actorsListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -138,5 +139,27 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/actorsTitle" />
-    </android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/episodesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Episodes"
+            android:textAppearance="@android:style/TextAppearance.Material.Menu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/actorsListView" />
+
+        <com.example.my.trackr.ui.NonScrollListView
+            android:id="@+id/episodesListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/episodesTitle" />
+    </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
