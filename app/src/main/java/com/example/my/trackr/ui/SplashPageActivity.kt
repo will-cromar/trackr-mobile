@@ -19,6 +19,7 @@ import android.widget.*
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
 import com.example.my.trackr.data.Genre
+import com.example.my.trackr.data.Listing
 import com.example.my.trackr.data.UserSessionManager
 import com.example.my.trackr.data.WebApiService
 import com.example.my.trackr.service.NotificationCheckerService
@@ -192,13 +193,15 @@ class SplashNotificationsFragment : Fragment() {
         if(sessionManager.hasActiveSession){
         val movies = doAsyncResult{webApi.subscriptions(sessionManager.getToken())}.get()
 
-        for (Listings in movies.component1()){
+        for (Listings in movies.subscriptions){
             val listTitle = mutableListOf<String>()
 
             // listTitle.add(Listings.title)
             listTitle.add(Listings.description)
-            for(Schedules in Listings.schedules!!) {
-                listTitle.add("Episode: " + Schedules.episode.toString() +" Air Date:  "+ convertTime(Schedules.date).toString())
+            if (Listings.schedules != null) {
+                for(Schedules in Listings.schedules) {
+                    listTitle.add("Episode: " + Schedules.episode.toString() +" Air Date:  "+ convertTime(Schedules.date).toString())
+                }
             }
             for(Actors in Listings.actors){
                 listTitle.add("Actor: " + Actors.name)
