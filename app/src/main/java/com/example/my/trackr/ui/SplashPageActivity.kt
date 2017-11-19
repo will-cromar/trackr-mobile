@@ -24,7 +24,7 @@ import com.example.my.trackr.data.WebApiService
 import com.example.my.trackr.service.NotificationCheckerService
 import kotlinx.android.synthetic.main.activity_splash_page.*
 import kotlinx.android.synthetic.main.fragment_splash_browse.view.*
-import kotlinx.android.synthetic.main.fragment_splash_reminders.view.*
+import kotlinx.android.synthetic.main.fragment_splash_subscriptions.view.*
 import kotlinx.android.synthetic.main.list_header.view.*
 import kotlinx.android.synthetic.main.list_children.view.*
 import kotlinx.android.synthetic.main.row_browse.view.*
@@ -185,7 +185,7 @@ class SplashNotificationsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        val viewGroup = inflater!!.inflate(R.layout.fragment_splash_reminders, container, false)
+        val viewGroup = inflater!!.inflate(R.layout.fragment_splash_subscriptions, container, false)
         (activity.application as MainApplication).component.inject(this)
 
         val nameTable = mutableMapOf<String, List<String>>()
