@@ -1,7 +1,9 @@
 package com.example.my.trackr.ui
 
+import android.app.Activity
 import android.app.job.JobInfo
 import android.content.ComponentName
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
@@ -13,8 +15,7 @@ import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.BaseAdapter
+import android.widget.*
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
 import com.example.my.trackr.data.Genre
@@ -24,12 +25,13 @@ import com.example.my.trackr.service.NotificationCheckerService
 import kotlinx.android.synthetic.main.activity_splash_page.*
 import kotlinx.android.synthetic.main.fragment_splash_browse.view.*
 import kotlinx.android.synthetic.main.fragment_splash_reminders.view.*
+import kotlinx.android.synthetic.main.list_header.view.*
+import kotlinx.android.synthetic.main.list_children.view.*
 import kotlinx.android.synthetic.main.row_browse.view.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.doAsyncResult
-import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.*
 import org.jetbrains.anko.support.v4.startActivity
-import org.jetbrains.anko.uiThread
+import org.jetbrains.anko.support.v4.toast
+import java.util.*
 import javax.inject.Inject
 
 class SplashPageActivity : AppCompatActivity() {
@@ -176,24 +178,118 @@ class SplashNotificationsFragment : Fragment() {
     @Inject lateinit var sessionManager: UserSessionManager
     @Inject lateinit var webApi: WebApiService
 
+    fun convertTime(epochTime: Long): Date {
+        val localDate = Date(epochTime*1000L)
+        return localDate
+    }
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
         val viewGroup = inflater!!.inflate(R.layout.fragment_splash_reminders, container, false)
         (activity.application as MainApplication).component.inject(this)
 
-        // Bad for 2 reasons:
-        // 1. It's just dumping the parsed JSON response from the server
-        // 2. Blindly getting the future from doAsyncResult blocks the main thread
-        // TODO: Do better.
-        viewGroup.textView3.text = when(sessionManager.hasActiveSession) {
-            false -> "Log in for notifications!"
-            true -> {
-                doAsyncResult {
-                    "Notifications for will: ${webApi.subscriptions(sessionManager.getToken())}"
-                }.get()
+        val nameTable = mutableMapOf<String, List<String>>()
+        if(sessionManager.hasActiveSession){
+        val movies = doAsyncResult{webApi.subscriptions(sessionManager.getToken())}.get()
+
+        for (Listings in movies.component1()){
+            val listTitle = mutableListOf<String>()
+
+            // listTitle.add(Listings.title)
+            listTitle.add(Listings.description)
+            for(Schedules in Listings.schedules!!) {
+                listTitle.add("Episode: " + Schedules.episode.toString() +" Air Date:  "+ convertTime(Schedules.date).toString())
             }
+            for(Actors in Listings.actors){
+                listTitle.add("Actor: " + Actors.name)
+            }
+            for(Genres in Listings.genres){
+
+                listTitle.add("Genres: " + Genres.genre)
+            }
+
+            listTitle.add("Release Date: " + Listings.releaseDatePretty)
+
+            nameTable.put(Listings.title, listTitle)
+
+
         }
 
+        val expandableListTitel = nameTable.keys.toList()
+
+
+        viewGroup.expand.setAdapter(ExpandableAdapter(viewGroup.context,expandableListTitel, nameTable))
+        return viewGroup}
+        else{
+            toast("Log in for your Personalized Notifications!!!")
+        }
         return viewGroup
     }
+
+    private class ExpandableAdapter(val context: Context, val list: List<String>, val map : Map<String,List<String>>): BaseExpandableListAdapter() {
+        val expandableListTitle = list
+        val expandableListDetail = map
+
+        override fun getGroupCount(): Int {
+            return this.expandableListTitle.size
+        }
+
+        override fun getChildId(p0: Int, p1: Int): Long {
+            return p1.toLong()
+        }
+
+        override fun getChildView(p0: Int, p1: Int, p2: Boolean, p3: View?, p4: ViewGroup?): View {
+            val text = getChild(p0, p1)
+            var view = p3
+            if (view == null) {
+                val newInflater = context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                view = newInflater.inflate(R.layout.list_children, null)
+            }
+
+            view!!.expandableChildren.text = text.toString()
+
+            return view
+
+        }
+
+        override fun getGroupId(p0: Int): Long {
+           return p0.toLong()
+        }
+
+        override fun getChild(p0: Int, p1: Int): Any {
+            return this.expandableListDetail.get(this.expandableListTitle.get(p0))!!.get(p1)
+        }
+
+        override fun getChildrenCount(p0: Int): Int {
+            return this.expandableListDetail.get(this.expandableListTitle.get(p0))!!.size
+
+        }
+
+        override fun getGroupView(p0: Int, p1: Boolean, p2: View?, p3: ViewGroup?): View {
+            val listTitel = getGroup(p0)
+            var view = p2
+
+            if(p2 == null) {
+                val newInflater = context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                 view = newInflater.inflate(R.layout.list_header, null)
+            }
+            view!!.expandableHeader.text = listTitel.toString()
+
+            return view
+        }
+
+        override fun hasStableIds(): Boolean {
+           return false
+        }
+
+        override fun isChildSelectable(p0: Int, p1: Int): Boolean {
+            return true
+        }
+
+        override fun getGroup(p0: Int): Any {
+            return this.expandableListTitle.get(p0)
+        }
+
+    }
+
 }
