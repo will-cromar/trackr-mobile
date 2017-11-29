@@ -1,4 +1,4 @@
-package com.example.my.trackr.data
+package com.example.my.trackr.web
 
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
@@ -53,8 +53,8 @@ data class Notification(val listing_id: Long, val message: String, val time: Lon
 }
 data class NotificationsResponse(val notifications: List<Notification>)
 
-class WebApiService @Inject constructor(private val requestInterface: HttpClient,
-                                        private val gson: Gson) {
+class TrackrWebApi @Inject constructor(private val requestInterface: HttpClient,
+                                       private val gson: Gson) {
 
     companion object {
         // List of endpoints for all services

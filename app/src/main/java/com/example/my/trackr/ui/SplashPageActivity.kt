@@ -18,10 +18,9 @@ import android.view.ViewGroup
 import android.widget.*
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
-import com.example.my.trackr.data.Genre
-import com.example.my.trackr.data.Listing
-import com.example.my.trackr.data.UserSessionManager
-import com.example.my.trackr.data.WebApiService
+import com.example.my.trackr.web.Genre
+import com.example.my.trackr.web.UserSessionManager
+import com.example.my.trackr.web.TrackrWebApi
 import com.example.my.trackr.service.NotificationCheckerService
 import kotlinx.android.synthetic.main.activity_splash_page.*
 import kotlinx.android.synthetic.main.fragment_splash_browse.view.*
@@ -139,7 +138,7 @@ class SplashHomeFragment : Fragment() {
 }
 
 class SplashBrowseFragment : Fragment() {
-    @Inject lateinit var webApi: WebApiService
+    @Inject lateinit var webApi: TrackrWebApi
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -177,7 +176,7 @@ class SplashBrowseFragment : Fragment() {
 
 class SplashNotificationsFragment : Fragment() {
     @Inject lateinit var sessionManager: UserSessionManager
-    @Inject lateinit var webApi: WebApiService
+    @Inject lateinit var webApi: TrackrWebApi
 
     fun convertTime(epochTime: Long): Date {
         val localDate = Date(epochTime*1000L)

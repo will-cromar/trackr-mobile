@@ -1,4 +1,4 @@
-package com.example.my.trackr.data
+package com.example.my.trackr.web
 
 import android.net.Uri
 import android.util.Log

@@ -1,4 +1,4 @@
-package com.example.my.trackr.data
+package com.example.my.trackr.web
 
 import org.junit.Test
 import org.mockito.Mockito.`when`
@@ -18,7 +18,7 @@ class UserSessionManagerTest {
 
     @Test
     fun attemptLogin_CorrectTest() {
-        val mockWebApi = mock(WebApiService::class.java)
+        val mockWebApi = mock(TrackrWebApi::class.java)
         `when`(mockWebApi.authenticate(credentials))
                 .thenReturn(authorization)
 
@@ -29,7 +29,7 @@ class UserSessionManagerTest {
 
     @Test
     fun attemptLogin_IncorrectTest() {
-        val mockWebApi = mock(WebApiService::class.java)
+        val mockWebApi = mock(TrackrWebApi::class.java)
         `when`(mockWebApi.authenticate(credentials))
                 .thenReturn(failedAuthorization)
 
@@ -44,7 +44,7 @@ class UserSessionManagerTest {
 
     @Test
     fun getToken_CorrectTest() {
-        val mockWebApi = mock(WebApiService::class.java)
+        val mockWebApi = mock(TrackrWebApi::class.java)
         `when`(mockWebApi.authenticate(credentials))
                 .thenReturn(authorization)
         `when`(mockWebApi.whoAmI(authorization))
@@ -58,7 +58,7 @@ class UserSessionManagerTest {
 
     @Test
     fun getToken_WithoutLoginTest() {
-        val mockWebApi = mock(WebApiService::class.java)
+        val mockWebApi = mock(TrackrWebApi::class.java)
         val sessionManager = UserSessionManager(mockWebApi)
         try {
             sessionManager.getToken()

@@ -9,15 +9,15 @@ import android.content.Intent
 import android.support.v4.app.NotificationCompat
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
-import com.example.my.trackr.data.UserSessionManager
-import com.example.my.trackr.data.WebApiService
+import com.example.my.trackr.web.UserSessionManager
+import com.example.my.trackr.web.TrackrWebApi
 import com.example.my.trackr.ui.MovieDetailsActivity
 import com.example.my.trackr.ui.extraListingId
 import org.jetbrains.anko.doAsync
 import javax.inject.Inject
 
 class NotificationCheckerService : JobService() {
-    @Inject lateinit var webApi: WebApiService
+    @Inject lateinit var webApi: TrackrWebApi
     @Inject lateinit var sessionManager: UserSessionManager
 
     override fun onStartJob(params: JobParameters?): Boolean {

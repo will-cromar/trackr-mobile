@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
-import com.example.my.trackr.data.*
+import com.example.my.trackr.web.*
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.*
 import javax.inject.Inject

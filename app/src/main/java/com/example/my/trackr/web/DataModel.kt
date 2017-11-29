@@ -1,4 +1,4 @@
-package com.example.my.trackr.data
+package com.example.my.trackr.web
 
 import java.text.SimpleDateFormat
 import java.util.*

@@ -11,7 +11,7 @@ import android.widget.AdapterView
 import android.widget.BaseAdapter
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
-import com.example.my.trackr.data.*
+import com.example.my.trackr.web.*
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_movie_details.*
 import kotlinx.android.synthetic.main.content_movie_details.*
@@ -27,7 +27,7 @@ val extraListingId = "LISTING_ID"
 
 class MovieDetailsActivity : AppCompatActivity() {
     @Inject lateinit var gson: Gson
-    @Inject lateinit var webApi: WebApiService
+    @Inject lateinit var webApi: TrackrWebApi
     @Inject lateinit var sessionManager: UserSessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {

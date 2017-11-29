@@ -1,4 +1,4 @@
-package com.example.my.trackr.data
+package com.example.my.trackr.web
 
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -6,7 +6,7 @@ import javax.inject.Singleton
 
 // TODO: Make this class less nullable
 @Singleton
-class UserSessionManager @Inject constructor(private val webApi: WebApiService) {
+class UserSessionManager @Inject constructor(private val webApi: TrackrWebApi) {
     var username: String? = null
     private var password: String? = null
     private var authorization: AuthResponse? = null

@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.my.trackr.MainApplication
 import com.example.my.trackr.R
-import com.example.my.trackr.data.*
+import com.example.my.trackr.web.*
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_search_results_page.*
 import org.jetbrains.anko.*
@@ -22,7 +22,7 @@ import javax.inject.Inject
 const val EXTRA_QUERY = "query"
 
 class SearchResultsActivity : AppCompatActivity() {
-    @Inject lateinit var webApi: WebApiService
+    @Inject lateinit var webApi: TrackrWebApi
     @Inject lateinit var gson: Gson
 
     override fun onCreate(savedInstanceState: Bundle?) {
